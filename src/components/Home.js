@@ -3,6 +3,7 @@ import { Recipe } from "../style";
 
 const Container = styled.div`
     max-width: 60%;
+    min-width: 600px;
     height: 100%;
     display: flex;
     justify-content: space-between;

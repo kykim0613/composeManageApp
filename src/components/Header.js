@@ -12,6 +12,7 @@ const MenuBox = styled.div`
   display: flex;
 `;
 const Outer = styled.div`
+  min-width: 600px;
   width: 60%;
   border-bottom: 1px solid #333;
   border-top: 1px solid #333;
@@ -30,27 +31,25 @@ const Inner = styled.div`
   cursor: pointer;
   position: relative;
   background: #fff;
+  a {
+    min-width: 100px;
+    padding: 1.5rem 0;
+    text-align: center;
+  }
   span {
     width: 60%;
-    transition: 0.3s;
-    opacity: 0;
     position: absolute;
     top: 100%;
-    justify-content: center;
-    align-items: center;
     text-align: center;
     padding: 1.5rem;
-    p {
-      display: none;
-    }
+    background: #fff;
+    z-index: 1;
+    border: 1px solid #555;
+    display: none;
   }
   &: hover, active {
     span {
-      border: 1px solid #555;
-      opacity: 1;
-      p {
-        display: block;
-      }
+      display: block;
     }
   }
 `;
@@ -65,17 +64,22 @@ const Header = () => {
             <Link to="/">홈</Link>
           </Inner>
           <Inner>
-            <Link to="/employee">직원 관리</Link>
+            <Link to="/employee">직원</Link>
             <span>
-              <p>메뉴1</p>
-              <p>메뉴2</p>
-              <p>메뉴3</p>
-              <p>메뉴4</p>
-              <p>메뉴5</p>
+              <Link to="/employee">직원 관리</Link>
+              <p>급여 대장</p>
+              <Link to="/commute">출퇴근 관리</Link>
+              <Link to={"/timetable"}>
+                <p>시간표</p>
+              </Link>
             </span>
           </Inner>
-          <Inner>점포 관리</Inner>
-          <Inner>출퇴근 관리</Inner>
+          <Inner>
+            <Link>점포 관리</Link>
+          </Inner>
+          <Inner>
+            <Link to="/commute">출퇴근 관리</Link>
+          </Inner>
         </Outer>
       </MenuBox>
     </>
