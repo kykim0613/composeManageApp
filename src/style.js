@@ -21,21 +21,42 @@ export const Container = styled.div`
 `;
 
 export const Btn = styled.button`
-  display: inline-block;
+  display: flex;
   background-color: #2c3e50;
   color: #fff;
   broder: none;
-  padding: 0.4em 0.65em;
+  padding: 0.6em 0.85em;
   border-radius: 0.25em;
   font-size: 1em;
   cursor: pointer;
-  margin-top: 1.5rem;
   font-weight: 400;
   line-height: 1.5;
   vertical-align: middle;
-  a {
-    display: block;
-    padding: 0.4em 0.65em;
-    color: #fff;
+  margin: 0 auto;
+  margin-top: 2em;
+`;
+
+export const ListTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  background: beige;
+`;
+
+export const Title = styled.div`
+  margin-top: 2px;
+  border-top: 1px solid #333;
+  width: 100%;
+  font-size: 0.7em;
+  @media (max-width: 800px) {
+    font-size: 1em;
+  }
+`;
+
+export const Name = styled.p`
+  width: 4%;
+  @media (max-width: 800px) {
+    width: 15%;
   }
 `;

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import JoinUs from "./JoinUs";
+import { useForm } from "react-hook-form";
 
 const AuthContainer = styled.div`
   max-width: 500px;
@@ -33,6 +34,8 @@ const AuthContainer = styled.div`
 `;
 
 const Auth = () => {
+  const {register} = useForm()
+
     const handleAuthBtn = (e) => {
         e.preventDefault()
     }

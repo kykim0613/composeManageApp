@@ -4,9 +4,9 @@ import Auth from "./pages/Auth";
 import JoinUs from "./pages/JoinUs";
 import Employee from "./pages/Employee";
 import Header from "./components/Header";
-import Commute from "./components/Commute";
 import Register from "./pages/Register";
 import TimeTable from "./pages/TimeTable";
+import Commute from "./pages/Commute";
 
 const Router = () => {
     return (
@@ -14,8 +14,8 @@ const Router = () => {
         <Header />
         <Outlet />
             <Routes>
-                <Route path="/" element={<Main />} />
-                <Route path="/auth" element={<Auth />} />
+                <Route path="/Main" element={<Main />} />
+                <Route path="/" element={<Auth />} />
                 <Route path="/joinus" element={<JoinUs />} />
                 <Route path="/employee" element={<Employee />} />
                 <Route path="/commute" element={<Commute />} />

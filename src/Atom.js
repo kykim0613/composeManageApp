@@ -1,46 +1,17 @@
-const menu = [obj1, obj2, obj3, obj4, obj5];
+import { atom } from "recoil";
 
-const obj1 = {
-  id: 1,
-  name: "",
-  url: "",
-  order: 1,
-  default: true,
-  list: []
-};
+export const format = {
+  "1. 이름": "",
+  "2. 성별": "",
+  "3. 주민번호": "",
+  "4. 주소": "",
+  "5. 번호": "",
+  "6. 이메일": "",
+  "7. 계좌": ""
+}
 
-const obj2 = {
-  id: 2,
-  name: "",
-  url: "",
-  order: 2,
-  default: true,
-  list: []
-};
+export const clickedEmployee = atom({
+  key: "employee",
+  default: {}
+})
 
-const obj3 = {
-  id: 3,
-  name: "",
-  url: "",
-  order: 3,
-  default: true,
-  list: []
-};
-
-const obj4 = {
-  id: 4,
-  name: "",
-  url: "",
-  order: 4,
-  default: true,
-  list: []
-};
-
-const obj5 = {
-  id: 5,
-  name: "",
-  url: "",
-  order: 5,
-  default: true,
-  list: []
-};
