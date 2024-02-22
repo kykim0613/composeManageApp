@@ -1,29 +1,34 @@
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Main from "./pages/Main";
-import Auth from "./pages/Auth";
+import LogIn from "./pages/LogIn";
 import JoinUs from "./pages/JoinUs";
 import Employee from "./pages/Employee";
 import Header from "./components/Header";
 import Register from "./pages/Register";
 import TimeTable from "./pages/TimeTable";
 import Commute from "./pages/Commute";
+import SelectStore from "./pages/SelectStore";
+import { useRecoilValue } from "recoil";
+import { toggle } from "./Atom";
 
 const Router = () => {
-    return (
-        <BrowserRouter>
-        <Header />
-        <Outlet />
-            <Routes>
-                <Route path="/Main" element={<Main />} />
-                <Route path="/" element={<Auth />} />
-                <Route path="/joinus" element={<JoinUs />} />
-                <Route path="/employee" element={<Employee />} />
-                <Route path="/commute" element={<Commute />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/timetable" element={<TimeTable />} />
-            </Routes>
-        </BrowserRouter>
-    )
-}
+  const storeToggle = useRecoilValue(toggle);
+  return (
+    <BrowserRouter>
+      <Header />
+      <Outlet />
+      <Routes>
+        <Route path="/" element={<LogIn />} />
+        {storeToggle && <Route path="/select" element={<SelectStore />} />}
+        <Route path="/main" element={<Main />} />
+        <Route path="/joinus" element={<JoinUs />} />
+        <Route path="/employee" element={<Employee />} />
+        <Route path="/commute" element={<Commute />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/timetable" element={<TimeTable />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default Router;

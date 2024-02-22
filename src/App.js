@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import Router from "./Router";
+import { useState } from "react";
 
 function App() {
   const GlobalStyle = createGlobalStyle`
@@ -27,6 +28,8 @@ function App() {
       box-size: border-box;
     }
 `;
+
+const [loggedIn, setLoggedIn] = useState(false)
   return (
     <>
       <GlobalStyle />

@@ -1,15 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Btn, Container, ListTitle, Name, Title } from "../style";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { employeesListApi } from "../api";
-import Register from "./Register";
-import { useRecoilState } from "recoil";
-import { clickedEmployee, format } from "../Atom";
+import { fetchEmployeesList, fetchDeleteEmployee } from "../api";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { clickedEmployee, store } from "../Atom";
+import { confirmAlert } from "react-confirm-alert";
 
 const List = styled.div`
-  min-width: 900px;
+  min-width: 1200px;
   margin: 0 auto;
   border-top: 2px solid #333;
   position: relative;
@@ -25,20 +24,21 @@ const ListContainer = styled.div`
   align-items: center;
   font-size: 0.7em;
   cursor: pointer;
+  white-space: nowrap;
   div {
     transition: 0.3s;
     width: 100%;
     display: flex;
   }
   :hover {
-    color: red;
+    color: ${(props) => (props.active ? "" : "red")}};
   }
 
   @media (max-width: 800px) {
     font-size: 1em;
   }
 `;
-
+const Select = styled.input``;
 const Num = styled.p`
   width: 4%;
   @media (max-width: 800px) {
@@ -125,29 +125,66 @@ const Day = styled.p`
 
 const Memo = styled.p`
   width: 5%;
+  text-overflow: ellipsis;
+  overflow: hidden;
   @media (max-width: 800px) {
     width: 20%;
   }
 `;
 
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 3em;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+`;
+
+const ModalContent = styled.div`
+  text-align: center;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const CancelButton = styled.button`
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #dc3545;
+  color: #ffffff;
+  cursor: pointer;
+`;
+
+const ConfirmButton = styled.div`
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2c3e50;
+  color: #ffffff;
+  cursor: pointer;
+`;
+
 const Employee = () => {
   const [employees, setEmployees] = useState([]);
   const [clicked, setClicked] = useRecoilState(clickedEmployee);
+  const [deleteMode, setDeleteMode] = useState(false);
+  const obj = useRecoilValue(store);
+
+  employees.sort((a, b) => a.id - b.id);
+
   const navigator = useNavigate();
+
   useEffect(() => {
-    const EmploayeesListFetch = async (employeesListApi) => {
-      try {
-        const res = await axios.get(employeesListApi);
-
-        console.log(res.data.data);
-
-        return setEmployees(res.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    EmploayeesListFetch(employeesListApi);
+    fetchEmployeesList(obj).then((result) => {
+      setEmployees(result);
+    });
   }, []);
 
   const handleUpdateBtn = (index) => {
@@ -162,7 +199,42 @@ const Employee = () => {
     setClicked({});
   };
 
+  console.log(employees);
+
+  const handleDeleteEmployee = (employee) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ModalContainer>
+            <ModalContent>
+              <h1>{employee.name}님</h1>
+              <p>정말 삭제하시겠습니까?</p>
+              <ButtonsContainer>
+                <ConfirmButton
+                  tabIndex="0"
+                  onClick={() => {
+                    onClose();
+                    alert("삭제되었습니다.");
+                    fetchDeleteEmployee(employee.id, setDeleteMode, obj, setEmployees);
+                  }}
+                >
+                  확인
+                </ConfirmButton>
+                <CancelButton onClick={onClose}>취소</CancelButton>
+              </ButtonsContainer>
+            </ModalContent>
+          </ModalContainer>
+        );
+      },
+    });
+  };
+
+  const handleDeleteBtn = () => {
+    setDeleteMode(!deleteMode);
+  };
+
   const year = new Date(Date.now()).getFullYear();
+
   return (
     <Container>
       <List>
@@ -184,9 +256,15 @@ const Employee = () => {
             <Memo>비고</Memo>
           </ListTitle>
         </Title>
-        {employees.map((employee, index) => (
-          <ListContainer key={employee.id}>
-            <div onClick={() => handleUpdateBtn(index)}>
+        {employees?.map((employee, index) => (
+          <ListContainer active={deleteMode} key={employee.id}>
+            <div
+              onClick={
+                deleteMode
+                  ? () => handleDeleteEmployee(employee)
+                  : () => handleUpdateBtn(index)
+              }
+            >
               <Num>{index + 1}</Num>
               <Name>{employee.name}</Name>
               <Rank>{employee.rank}</Rank>
@@ -225,7 +303,14 @@ const Employee = () => {
           </ListContainer>
         ))}
       </List>
-      <Btn onClick={handleRegisterBtn}>등록</Btn>
+      {deleteMode ? (
+        <Btn onClick={handleDeleteBtn}>취소</Btn>
+      ) : (
+        <>
+          <Btn onClick={handleRegisterBtn}>등록</Btn>
+          <Btn onClick={handleDeleteBtn}>삭제</Btn>
+        </>
+      )}
     </Container>
   );
 };

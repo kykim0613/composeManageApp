@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Recipe = styled.div`
+export const RecipeBox = styled.div`
     width: calc(25% - 10px);
     display: flex;
     flex:direction: column;
@@ -12,8 +12,7 @@ export const Recipe = styled.div`
 `;
 
 export const Container = styled.div`
-  width: 60%;
-  height: 600px;
+  width: 80%;
   min-width: 600px;
   margin: 0 auto;
   text-align: center;
@@ -21,7 +20,6 @@ export const Container = styled.div`
 `;
 
 export const Btn = styled.button`
-  display: flex;
   background-color: #2c3e50;
   color: #fff;
   broder: none;

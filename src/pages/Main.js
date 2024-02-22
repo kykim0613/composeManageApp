@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import Home from "../components/Home";
+import Recipe from "../components/Recipe";
+import axios from "axios";
+
 
 const HeaderBox = styled.div`
     position: relative;
@@ -8,7 +10,7 @@ const HeaderBox = styled.div`
 const Main = () => {
     return (
         <HeaderBox>
-        <Home />
+        <Recipe />
         </HeaderBox>
     )
 }

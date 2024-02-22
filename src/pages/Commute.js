@@ -4,6 +4,13 @@ import { Btn, Container, ListTitle, Title } from "../style";
 import DatePicker from "react-flatpickr";
 import "flatpickr/dist/themes/light.css";
 import "flatpickr/dist/flatpickr.css";
+import handleRealEndInput from "../func/CommuteEditInput.js/handleRealEndInput";
+import handleRealStartInput from "../func/CommuteEditInput.js/handleRealStartInput";
+import handleCalStartInput from "../func/CommuteEditInput.js/handleCalStartInput";
+import handleCalEndInput from "../func/CommuteEditInput.js/handleCalEndInput";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { fetchSelectedStoreCommuteList } from "../api";
 
 const TopLine = styled.div`
   border-top: 2px solid #333;
@@ -63,6 +70,7 @@ const Commute = () => {
   const [toggle, setToggle] = useState(true);
   const [realToggle, setRealToggle] = useState(false);
   const [calToggle, setCalToggle] = useState(false);
+  const [preValue, setPreValue] = useState({});
   const [value, setValue] = useState({
     storeId: "1",
     employeeId: "1",
@@ -70,6 +78,11 @@ const Commute = () => {
     calStartTime: "2023-11-30T12:30:00",
     realEndTime: "2023-11-30T14:09:45",
     calEndTime: "2023-11-30T14:00:00",
+  });
+
+
+  useEffect(() => {
+    const data = fetchSelectedStoreCommuteList()
   });
 
   //날짜 포맷
@@ -134,68 +147,24 @@ const Commute = () => {
 
   const handleRealToggle = () => {
     setRealToggle(!realToggle);
+    setPreValue(value);
   };
 
   const handleCalToggle = () => {
     setCalToggle(!calToggle);
+    setPreValue(value);
   };
 
-  const handleBtn = () => {
+  const handleRegisterBtn = () => {
     setRealToggle(false);
     setCalToggle(false);
   };
 
-  const handleRealStartInput = (selectedDates, dateStr) => {
-    const time = format+`${dateStr}`;
-
-    setValue({
-      storeId: value.storeId,
-      employeeId: value.employeeId,
-      realStartTime: time,
-      calStartTime: value.calStartTime,
-      realEndTime: value.realEndTime,
-      calEndTime: value.calEndTime,
-    });
+  const handleCancelBtn = () => {
+    setValue(preValue);
+    setRealToggle(false);
+    setCalToggle(false);
   };
-
-  const handleRealEndInput = (selectedDates, dateStr) => {
-    const time = format+`${dateStr}`;
-
-    setValue({
-      storeId: value.storeId,
-      employeeId: value.employeeId,
-      realStartTime: value.realStartTime,
-      calStartTime: value.calStartTime,
-      realEndTime: time,
-      calEndTime: value.calEndTime,
-    });
-  }
-
-  const handleCalStartInput = (selectedDates, dateStr) => {
-    const time = format+`${dateStr}`;
-
-    setValue({
-      storeId: value.storeId,
-      employeeId: value.employeeId,
-      realStartTime: value.realStartTime,
-      calStartTime: time,
-      realEndTime: value.realEndTime,
-      calEndTime: value.calEndTime,
-    });
-  }
-
-  const handleCalEndInput = (selectedDates, dateStr) => {
-    const time = format+`${dateStr}`;
-
-    setValue({
-      storeId: value.storeId,
-      employeeId: value.employeeId,
-      realStartTime: value.realStartTime,
-      calStartTime: value.calStartTime,
-      realEndTime: value.realEndTime,
-      calEndTime: time,
-    });
-  }
 
   return (
     <Container>
@@ -224,7 +193,14 @@ const Commute = () => {
                 enableSeconds: true,
                 dateFormat: "H:i:S",
                 defaultDate: realStartTime,
-                onChange: handleRealStartInput,
+                onChange: (selectedDates, dateStr) =>
+                  handleRealStartInput(
+                    selectedDates,
+                    dateStr,
+                    value,
+                    setValue,
+                    format
+                  ),
               }}
             />
             <DatePicker
@@ -234,7 +210,14 @@ const Commute = () => {
                 enableSeconds: true,
                 dateFormat: "H:i:S",
                 defaultDate: realEndTime,
-                onChange: handleRealEndInput
+                onChange: (selectedDates, dateStr) =>
+                  handleRealEndInput(
+                    selectedDates,
+                    dateStr,
+                    value,
+                    setValue,
+                    format
+                  ),
               }}
             />
           </TimeWrap>
@@ -253,7 +236,14 @@ const Commute = () => {
                 enableSeconds: true,
                 dateFormat: "H:i:S",
                 defaultDate: calStartTime,
-                onChange: handleCalStartInput
+                onChange: (selectedDates, dateStr) =>
+                  handleCalStartInput(
+                    selectedDates,
+                    dateStr,
+                    value,
+                    setValue,
+                    format
+                  ),
               }}
             />
             <DatePicker
@@ -263,7 +253,14 @@ const Commute = () => {
                 enableSeconds: true,
                 dateFormat: "H:i:S",
                 defaultDate: calEndTime,
-                onChange: handleCalEndInput
+                onChange: (selectedDates, dateStr) =>
+                  handleCalEndInput(
+                    selectedDates,
+                    dateStr,
+                    value,
+                    setValue,
+                    format
+                  ),
               }}
             />
           </TimeWrap>
@@ -279,8 +276,8 @@ const Commute = () => {
       </ListContainer>
       {(realToggle || calToggle) && (
         <BtnContainer>
-          <Btn onClick={handleBtn}>등록</Btn>
-          <Btn onClick={handleBtn}>취소</Btn>
+          <Btn onClick={handleRegisterBtn}>등록</Btn>
+          <Btn onClick={handleCancelBtn}>취소</Btn>
         </BtnContainer>
       )}
     </Container>

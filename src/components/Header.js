@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { store, toggle } from "../Atom";
 
 const Title = styled.h3`
   text-align: center;
@@ -55,13 +57,19 @@ const Inner = styled.div`
 `;
 
 const Header = () => {
+  const storeName = useRecoilValue(store)
+  const [home, setHome] = useRecoilState(toggle)
+
+  const navHome = () => {
+    setHome(true)
+  }
   return (
     <>
-      <Title>컴포즈커피 둔촌동약수터점</Title>
+      <Title>{storeName.storeName}</Title>
       <MenuBox>
         <Outer>
           <Inner>
-            <Link to="/">홈</Link>
+            <Link onClick={navHome} to={"/main"}>홈</Link>
           </Inner>
           <Inner>
             <Link to="/employee">직원</Link>
