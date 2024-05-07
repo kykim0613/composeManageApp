@@ -12,14 +12,18 @@ import { useRecoilValue } from "recoil";
 import { toggle } from "./Atom";
 
 const Router = () => {
-  const storeToggle = useRecoilValue(toggle);
+  const routerToggle = useRecoilValue(toggle);
   return (
     <BrowserRouter>
+      {routerToggle ? (
+        <>
       <Header />
       <Outlet />
+      </>
+      ) : null}
       <Routes>
         <Route path="/" element={<LogIn />} />
-        {storeToggle && <Route path="/select" element={<SelectStore />} />}
+        <Route path="/select" element={<SelectStore />} />
         <Route path="/main" element={<Main />} />
         <Route path="/joinus" element={<JoinUs />} />
         <Route path="/employee" element={<Employee />} />

@@ -59,9 +59,8 @@ const Inner = styled.div`
 const Header = () => {
   const storeName = useRecoilValue(store)
   const [home, setHome] = useRecoilState(toggle)
-
   const navHome = () => {
-    setHome(true)
+    setHome(false)
   }
   return (
     <>
@@ -69,7 +68,7 @@ const Header = () => {
       <MenuBox>
         <Outer>
           <Inner>
-            <Link onClick={navHome} to={"/main"}>홈</Link>
+            <Link onClick={navHome} to={"/select"}>지점선택</Link>
           </Inner>
           <Inner>
             <Link to="/employee">직원</Link>

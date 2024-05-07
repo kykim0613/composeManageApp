@@ -1,6 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 import Router from "./Router";
 import { useState } from "react";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 function App() {
   const GlobalStyle = createGlobalStyle`
@@ -31,10 +33,10 @@ function App() {
 
 const [loggedIn, setLoggedIn] = useState(false)
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <GlobalStyle />
       <Router />
-    </>
+    </DndProvider>
   );
 }
 

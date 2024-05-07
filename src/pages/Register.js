@@ -3,9 +3,9 @@ import { Container } from "../style";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { employeeRegisterApi } from "../api";
+import { RegisterFetch, employeeRegisterApi } from "../api";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { clickedEmployee, user } from "../Atom";
+import { clickedEmployee, store, user } from "../Atom";
 import handleNameInput from "../func/EmployeeRegistration/RegistInputFunc/handleNameInput";
 import { useForm } from "react-hook-form";
 import handlePhoneInput from "../func/EmployeeRegistration/RegistInputFunc/handlePhoneInput";
@@ -132,10 +132,10 @@ const Btn = styled.button`
 const Register = () => {
   const {register, handleSubmit, errors} = useForm()
   const [employee, setEmployee] = useRecoilState(clickedEmployee);
-  const userObj = useRecoilValue(user);
-  const obj = userObj?.storeList.map((id) => id).sort((a,b) => a.id - b.id)
+  const selectedStore = useRecoilValue(store)
+  console.log(selectedStore)
   const [personalInfo, setPersonalInfo] = useState({
-    storeId: 1,
+    storeId: selectedStore?.id,
     name: "",
     phone: "",
     gender: false,
@@ -152,7 +152,7 @@ const Register = () => {
     rank: "CEO",
     retired: false,
   });
-  const navigator = useNavigate();
+  const nav = useNavigate();
   const rank = ["CEO", "Staff", "Manager"];
   const maleCheckBox = useRef();
   const femaleCheckBox = useRef();
@@ -176,17 +176,7 @@ const Register = () => {
   const handleForm = (e) => {
     e.preventDefault();
 
-    const RegisterFetch = async (personalInfo) => {
-      try {
-        const response = await axios.post(employeeRegisterApi, personalInfo);
-        console.log(response);
-        navigator("/employee");
-      } catch (error) {
-        console.error("에러", error);
-      }
-    };
-
-    RegisterFetch(personalInfo);
+    RegisterFetch(personalInfo, nav);
   };
 
   const handleValueChange = (e) => {
@@ -228,7 +218,7 @@ const Register = () => {
           <InputContainer>
             <RegisterInput
             disabled
-            value={obj[0].storeName}
+            value={selectedStore.storeName}
             />
           </InputContainer>
           <InputContainer>

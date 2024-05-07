@@ -7,7 +7,7 @@ export const store = atom({
 
 export const toggle = atom({
   key: "toggle",
-  default: true,
+  default: false,
 });
 
 export const format = {
@@ -46,3 +46,18 @@ export const user = atom({
   key: "user",
   default: {},
 });
+
+export const hovered = atom({
+  key: "hovered",
+  default: false
+})
+
+export const editState = atom({
+  key: "edit",
+  default: false
+})
+
+export const editBoxIndex = atom({
+  key: "index",
+  default: 0
+})
